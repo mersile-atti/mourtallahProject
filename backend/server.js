@@ -1,9 +1,13 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import serverRoutes from './routes/serverRoutes.js';
+const express = require('express');
+const promClient = require('prom-client');
+const dotenv = require('dotenv');
+const serverRoutes = require('./routes/serverRoutes');
 dotenv.config();
 
-import connectDB from './config/db.js';
+
+
+
+const connectDB = require('./config/db');
 
 connectDB();
 
@@ -13,6 +17,14 @@ const app = express();
 app.use(express.json());
 
 
+const collectDefaultMetrics = promClient.collectDefaultMetrics;
+collectDefaultMetrics({ app });
+
+app.get('/metrics', (req, res) => {
+    res.set('Content-Type', promClient.register.contentType);
+    res.end(promClient.register.metrics());
+  });
+  
 app.use('/api/servers', serverRoutes);
 
 

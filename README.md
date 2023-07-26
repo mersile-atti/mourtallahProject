@@ -1,4 +1,4 @@
-# Project Name
+ Project Name
 
 Short description of your project.
 
@@ -16,19 +16,32 @@ cd your-repo
 
 2. Install the Node.js dependencies:
 
+npm install
+
 
 3. Set up and configure your MongoDB database. Make sure to set the appropriate connection string in the application.
 
-4. Set up and configure Prometheus, Grafana, and AlertManager as described in the Monitoring and Alerting section.
+4. Build Docker images for the frontend and backend:
+
+docker build -t your-frontend-image ./frontend
+docker build -t your-backend-image ./backend
+
+
+5. Set up and configure Prometheus, Grafana, and AlertManager as described in the Monitoring and Alerting section.
 
 ## Usage
 
-To start the application, run the following command:
+To start the application using Docker Compose, run the following command:
 
-npm start
+docker-compose up
 
 
-The Node.js server will start, and you can access the application at http://localhost:3000.
+The application, along with Prometheus, Grafana, and AlertManager, will be started and can be accessed at the respective URLs.
+
+- Application: http://localhost:3000
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000 (credentials: admin/admin)
+- AlertManager: http://localhost:9093
 
 ## API Endpoints
 
@@ -43,35 +56,48 @@ List all the available API endpoints here, along with a brief description of eac
 
 This section describes how to set up and use Prometheus, Grafana, and AlertManager for monitoring and alerting purposes.
 
-1. **Prometheus:**
 
-   - Install and configure Prometheus to scrape metrics from the Node.js application. Update the `prometheus.yml` configuration file to specify the scraping targets.
 
-2. **Grafana:**
 
-   - Install and configure Grafana to visualize the collected metrics. Set up a data source for Prometheus and create custom dashboards and panels.
+# Installation et configuration de Prometheus :
+Téléchargez Prometheus sur le site officiel (https://prometheus.io/download/) basé sur le système d’exploitation de votre serveur.
+Extraire le paquet téléchargé et naviguer vers le répertoire Prometheus.
+Créez un fichier de configuration prometheus.yml.
 
-3. **AlertManager:**
+Exécuter Prometheus avec la commande suivante :
 
-   - Install and configure AlertManager to define alerting rules and notification channels. Update the `alertmanager.yml` configuration file to set up email or other notification channels.
+prometheus --config.file=prometheus.yml
 
-## Technologies Used
+# Instrument Votre application Node.js :
 
-List all the major technologies and tools used in the project:
+Installez la bibliothèque prom-client dans votre projet Node.js en utilisant npm:
 
-- Node.js
-- Express.js
-- MongoDB
-- React.js
-- Vite
-- Prometheus
-- Grafana
-- AlertManager
+npm install prom-client
+Dans votre code d’application Node.js, importez et utilisez la librairie prom-client pour instrumenter votre application avec des métriques personnalisées. Vous pouvez définir et exposer des métriques pour différents aspects de votre application, tels que les requêtes HTTP, les requêtes de base de données ou la logique métier personnalisée.
 
-## Contributing
+# Installation et configuration de Grafana :
 
-If you would like to contribute to this project, please follow the guidelines in the CONTRIBUTING.md file.
+Téléchargez Grafana sur le site officiel (https://grafana.com/grafana/download)
+Installez et exécutez Grafana en suivant les instructions de votre plateforme.
+Accédez à l’interface web de Grafana (généralement disponible sur http://localhost:3000) et connectez-vous avec les identifiants par défaut (admin/admin).
+Configurez la source de données pour connecter Grafana à Prometheus. Dans Grafana, allez dans "Configuration" > "Sources de données" > "Ajouter une source de données." Sélectionnez "Prometheus" comme type de source de données, et spécifiez l’URL de votre serveur Prometheus.
 
-## License
+# Installer et configurer AlertManager :
 
-This project is licensed under the MIT License. You are free to use, modify, and distribute the code as per the terms of the license.
+Téléchargez AlertManager à partir du site officiel (https://prometheus.io/download/).
+Extraire le paquet téléchargé et accéder au répertoire AlertManager.
+Créez un fichier de configuration alertmanager.yml. Dans ce fichier, vous définirez les règles d’alerte et les canaux de notification.
+
+Exécuter AlertManager avec la commande suivante :
+
+alertmanager --config.file=alertmanager.yml
+
+Configurer les alertes et les canaux de notification :
+Dans votre fichier de configuration prometheus.yml, définissez les règles d’alerte. Ces règles spécifient les conditions de génération d’alertes en fonction des métriques collectées.
+
+# Créez un fichier alert.rules.yml et définissez vos règles d’alerte
+
+# Tester la pile :
+Vérifiez que Prometheus gratte correctement les métriques de votre application Node.js en accédant à l’interface web de Prometheus (habituellement disponible à http://localhost:9090) et en interrogeant les métriques.
+Créez des exemples de tableaux de bord et de panneaux dans Grafana pour visualiser les mesures recueillies. Vous pouvez ajouter des visualisations et configurer des alertes dans Grafana en fonction des données métriques.
+Tester les règles d’alerte et les canaux de notification en déclenchant des alertes en fonction des conditions prédéfinies. Vous pouvez le faire en créant intentionnellement des conditions qui violent les règles

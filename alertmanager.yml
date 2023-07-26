@@ -1,0 +1,11 @@
+route:
+  receiver: 'email-notifications'
+
+receivers:
+  - name: 'email-notifications'
+    email_configs:
+      - to: 'your.email@example.com'
+        from: 'alertmanager@example.com'
+        smarthost: 'your-smtp-server:587'
+        auth_username: 'smtp-username'
+        auth_password: 'smtp-password'

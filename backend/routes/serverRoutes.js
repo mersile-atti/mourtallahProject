@@ -1,5 +1,5 @@
-import express from 'express';
-import Server from '../models/serverModel.js';
+const express = require('express');
+const Server = require('../models/serverModel');
 const router = express.Router();
 const app = express();
 
@@ -97,4 +97,5 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-export default router;
+
+module.exports = router;

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const serverSchema = mongoose.Schema(
     {
@@ -11,4 +11,4 @@ const serverSchema = mongoose.Schema(
 
 const Server = mongoose.model('Server', serverSchema);
 
-export default Server;
+module.exports = Server;
